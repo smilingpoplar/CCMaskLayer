@@ -195,6 +195,7 @@
 		87A82AF416086B98007F2E7C /* CCMaskLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87A82AF216086B98007F2E7C /* CCMaskLayer.cpp */; };
 		87A82B0E1609DF00007F2E7C /* mask.png in Resources */ = {isa = PBXBuildFile; fileRef = 87A82B0D1609DEFF007F2E7C /* mask.png */; };
 		87A82B111609E059007F2E7C /* mask-circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 87A82B101609E059007F2E7C /* mask-circle.png */; };
+		87A82B21160A3A1C007F2E7C /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 87A82B20160A3A1C007F2E7C /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -599,6 +600,7 @@
 		87A82AF316086B98007F2E7C /* CCMaskLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCMaskLayer.h; sourceTree = "<group>"; };
 		87A82B0D1609DEFF007F2E7C /* mask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mask.png; sourceTree = "<group>"; };
 		87A82B101609E059007F2E7C /* mask-circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mask-circle.png"; sourceTree = "<group>"; };
+		87A82B20160A3A1C007F2E7C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -623,6 +625,7 @@
 		87A8286A16086AF3007F2E7C = {
 			isa = PBXGroup;
 			children = (
+				87A82B20160A3A1C007F2E7C /* README.md */,
 				87A8288916086AF3007F2E7C /* CCMaskLayer */,
 				87A8287816086AF3007F2E7C /* Frameworks */,
 				87A8287616086AF3007F2E7C /* Products */,
@@ -1483,6 +1486,7 @@
 				87A8292816086AF5007F2E7C /* ChangeLog in Resources */,
 				87A82B0E1609DF00007F2E7C /* mask.png in Resources */,
 				87A82B111609E059007F2E7C /* mask-circle.png in Resources */,
+				87A82B21160A3A1C007F2E7C /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
