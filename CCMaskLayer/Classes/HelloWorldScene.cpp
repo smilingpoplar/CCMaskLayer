@@ -73,21 +73,23 @@ bool HelloWorld::init()
     // add the sprite as a child to this layer
     this->addChild(pSprite, 0);
     
-    CCSprite* p = CCSprite::create("HelloWorld.png");
     CCMaskLayer *layer = CCMaskLayer::create(ccc4(255, 0, 0, 200));
     addChild(layer);
     layer->begin();
-    layer->scratchOff(CCRectMake(20, 20, 200, 200));
-    layer->scratchOff(CCRectMake(100, 100, 150, 150));
-    p->setPosition(ccp(300, 300));
-    p->setScale(0.5);
+//    layer->scratchOff(CCRectMake(100, 100, 170, 170));
+    CCSprite* p = CCSprite::create("mask-circle.png");
+    p->setPosition(ccp(400.5, 300.5));
+    p->setScale(1.234);
     layer->scratchOff(p);
-    p->setPosition(ccp(300, 500));
-    p->setScale(0.8);
+    
+    p->setPosition(ccp(500.242, 500.9876));
+    p->setScale(1);
+    layer->scratchOff(p);
+    
+    p->setPosition(ccp(500.76, 200.34));
+    p->setScale(0.7);
     layer->scratchOff(p);
     layer->end();
-    layer->setOpacity(200);
-    layer->setColor(ccc3(0, 255, 255));
     return true;
 }
 

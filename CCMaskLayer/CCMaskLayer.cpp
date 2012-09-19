@@ -7,14 +7,23 @@
 //
 
 #include "CCMaskLayer.h"
+#include <algorithm>
 
 using namespace std;
 USING_NS_CC;
 
+bool strictIntersect(const CCRect& rect1, const CCRect &rect2)
+{
+    return !(rect1.getMaxX() <= rect2.getMinX() ||
+             rect2.getMaxX() <= rect1.getMinX() ||
+             rect1.getMaxY() <= rect2.getMinY() ||
+             rect2.getMaxY() <= rect1.getMinY());
+}
+
 // use vertical lines to split
 void split(const CCRect &rect, const CCRect &hole, vector<CCRect> &output)
 {
-    if (!hole.intersectsRect(rect)) {
+    if (!strictIntersect(hole, rect)) {
         output.push_back(rect);
         return;
     }
@@ -30,6 +39,7 @@ void split(const CCRect &rect, const CCRect &hole, vector<CCRect> &output)
     // middle region
     float left = MAX(hole.getMinX(), rect.getMinX());
     float right = MIN(hole.getMaxX(), rect.getMaxX());
+    if (right - left < 0) return;
     // middle-below
     if ((length = hole.getMinY()-rect.getMinY()) > 0) {
         output.push_back(CCRectMake(left, rect.getMinY(), right-left, length));
@@ -61,9 +71,10 @@ void merge(vector<CCRect> &output)
     }
 }
 
-vector<CCRect> split(const CCRect &rect, const vector<CCRect> &holes)
+vector<CCRect> split(const CCRect &rect, const vector<CCRect> &holes, vector<CCRect> &output)
 {
-    vector<CCRect> output = { rect };
+    output.clear();
+    output.push_back(rect);
     for (auto &hole : holes) {
         unsigned size = output.size();
         for (int i = 0; i < size; i++) {
@@ -150,6 +161,9 @@ void CCMaskLayer::addSprite(cocos2d::CCSprite *sprite)
     addChild(sprite);
     sprite->setColor(getModifiedColor());
     sprite->setOpacity(getModifiedOpacity());
+    CCLOG("sprite added: pos(%.2f, %.2f), size:(%.2f,%.2f), scale:(%.5f, %.5f)",
+          sprite->getPosition().x, sprite->getPosition().y, sprite->getContentSize().width, sprite->getContentSize().height,
+          sprite->getScaleX(), sprite->getScaleY());
     
     _spriteArray->addObject(sprite);
 }
@@ -160,12 +174,15 @@ void CCMaskLayer::clearSpriteArray()
     _spriteArray->removeAllObjects();
 }
 
+// XXX: using a global var to work around a werid bug,
+// otherwise this vector will somehow be released
+static vector<cocos2d::CCRect> _output;
 void CCMaskLayer::scratchOff(const vector<cocos2d::CCRect> &holes)
 {
     CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
     CCRect screenRect = CCRectMake(0, 0, screenSize.width, screenSize.height);
-    auto rectArray = split(screenRect, holes);
-    for (auto &rect : rectArray) {
+    split(screenRect, holes, _output);
+    for (auto &rect : _output) {
         addColorLayer(rect);
     }
 }
@@ -186,8 +203,10 @@ void CCMaskLayer::scratchOff(cocos2d::CCSprite *sprite)
 {
     CCRect rect = CCRectMake(0, 0, sprite->getContentSize().width, sprite->getContentSize().height);
     rect = CCRectApplyAffineTransform(rect, sprite->nodeToWorldTransform());
+    CCLOG("sprite rect: (%.2f, %.2f,%.2f,%.2f)", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+//    rect = CCRectMake(rect.origin.x, rect.origin.y+1, rect.size.width, rect.size.height);
     _holeArray.push_back(rect);
-
+    
     addSprite(sprite);
 }
 

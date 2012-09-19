@@ -17,6 +17,7 @@ class CCMaskLayer : public cocos2d::CCNode, public cocos2d::CCRGBAProtocol {
     CC_SYNTHESIZE_RETAIN(cocos2d::CCArray *, _spriteArray, SpriteArray);
 private:
     std::vector<cocos2d::CCRect> _holeArray;
+    
     cocos2d::ccColor4B _layerColor;
     GLubyte _opacity;
     cocos2d::ccColor3B _color;
