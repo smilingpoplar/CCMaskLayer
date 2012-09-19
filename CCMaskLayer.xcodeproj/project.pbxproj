@@ -192,6 +192,7 @@
 		87A82AE516086AFB007F2E7C /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87A82AE416086AFB007F2E7C /* RootViewController.mm */; };
 		87A82AE916086AFB007F2E7C /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87A82AE816086AFB007F2E7C /* AppDelegate.cpp */; };
 		87A82AEC16086AFB007F2E7C /* HelloWorldScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87A82AEB16086AFB007F2E7C /* HelloWorldScene.cpp */; };
+		87A82AF416086B98007F2E7C /* CCMaskLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87A82AF216086B98007F2E7C /* CCMaskLayer.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -592,6 +593,8 @@
 		87A82AE816086AFB007F2E7C /* AppDelegate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppDelegate.cpp; path = Classes/AppDelegate.cpp; sourceTree = "<group>"; };
 		87A82AEA16086AFB007F2E7C /* HelloWorldScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HelloWorldScene.h; path = Classes/HelloWorldScene.h; sourceTree = "<group>"; };
 		87A82AEB16086AFB007F2E7C /* HelloWorldScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = HelloWorldScene.cpp; path = Classes/HelloWorldScene.cpp; sourceTree = "<group>"; };
+		87A82AF216086B98007F2E7C /* CCMaskLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCMaskLayer.cpp; sourceTree = "<group>"; };
+		87A82AF316086B98007F2E7C /* CCMaskLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCMaskLayer.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1404,6 +1407,8 @@
 				87A82AE816086AFB007F2E7C /* AppDelegate.cpp */,
 				87A82AEA16086AFB007F2E7C /* HelloWorldScene.h */,
 				87A82AEB16086AFB007F2E7C /* HelloWorldScene.cpp */,
+				87A82AF316086B98007F2E7C /* CCMaskLayer.h */,
+				87A82AF216086B98007F2E7C /* CCMaskLayer.cpp */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -1645,6 +1650,7 @@
 				87A82AE516086AFB007F2E7C /* RootViewController.mm in Sources */,
 				87A82AE916086AFB007F2E7C /* AppDelegate.cpp in Sources */,
 				87A82AEC16086AFB007F2E7C /* HelloWorldScene.cpp in Sources */,
+				87A82AF416086B98007F2E7C /* CCMaskLayer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1707,17 +1713,21 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = CCMaskLayer/Prefix.pch;
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
 				INFOPLIST_FILE = CCMaskLayer/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_LDFLAGS = (
 					"-lxml2",
 					"-lz",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 2;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1726,16 +1736,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = CCMaskLayer/Prefix.pch;
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
 				INFOPLIST_FILE = CCMaskLayer/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_LDFLAGS = (
 					"-lxml2",
 					"-lz",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 2;
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};

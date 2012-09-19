@@ -1,5 +1,6 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
+#include "CCMaskLayer.h"
 
 using namespace cocos2d;
 using namespace CocosDenshion;
@@ -67,9 +68,17 @@ bool HelloWorld::init()
 
     // position the sprite on the center of the screen
     pSprite->setPosition( ccp(size.width/2, size.height/2) );
+    
 
     // add the sprite as a child to this layer
     this->addChild(pSprite, 0);
+    
+    CCMaskLayer *layer = CCMaskLayer::create(ccc4(255, 0, 0, 200));
+    addChild(layer);
+    layer->begin();
+    layer->scratchOff(CCRectMake(20, 20, 200, 200));
+    layer->scratchOff(CCRectMake(100, 100, 150, 150));
+    layer->end();
     
     return true;
 }
