@@ -161,9 +161,6 @@ void CCMaskLayer::addSprite(cocos2d::CCSprite *sprite)
     addChild(sprite);
     sprite->setColor(getModifiedColor());
     sprite->setOpacity(getModifiedOpacity());
-    CCLOG("sprite added: pos(%.2f, %.2f), size:(%.2f,%.2f), scale:(%.5f, %.5f)",
-          sprite->getPosition().x, sprite->getPosition().y, sprite->getContentSize().width, sprite->getContentSize().height,
-          sprite->getScaleX(), sprite->getScaleY());
     
     _spriteArray->addObject(sprite);
 }
@@ -203,8 +200,6 @@ void CCMaskLayer::scratchOff(cocos2d::CCSprite *sprite)
 {
     CCRect rect = CCRectMake(0, 0, sprite->getContentSize().width, sprite->getContentSize().height);
     rect = CCRectApplyAffineTransform(rect, sprite->nodeToWorldTransform());
-    CCLOG("sprite rect: (%.2f, %.2f,%.2f,%.2f)", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
-//    rect = CCRectMake(rect.origin.x, rect.origin.y+1, rect.size.width, rect.size.height);
     _holeArray.push_back(rect);
     
     addSprite(sprite);

@@ -37,6 +37,8 @@ public:
     static CCMaskLayer* create(const cocos2d::ccColor4B &color);
     void begin();
     void scratchOff(const cocos2d::CCRect &hole);
+    // XXX: sprite from spriteFrameCache loses coordinate precision when loading from plist,
+    // use sprite from file here
     void scratchOff(cocos2d::CCSprite *sprite);
     void end();
     // CCRGBAProtocol

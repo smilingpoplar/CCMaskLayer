@@ -69,27 +69,23 @@ bool HelloWorld::init()
     // position the sprite on the center of the screen
     pSprite->setPosition( ccp(size.width/2, size.height/2) );
     
-
     // add the sprite as a child to this layer
     this->addChild(pSprite, 0);
     
-    CCMaskLayer *layer = CCMaskLayer::create(ccc4(255, 0, 0, 200));
-    addChild(layer);
-    layer->begin();
-//    layer->scratchOff(CCRectMake(100, 100, 170, 170));
-    CCSprite* p = CCSprite::create("mask-circle.png");
-    p->setPosition(ccp(400.5, 300.5));
-    p->setScale(1.234);
-    layer->scratchOff(p);
+    CCMaskLayer *maskLayer = CCMaskLayer::create(ccc4(255, 0, 0, 200));
+    addChild(maskLayer);
+    maskLayer->begin(); // begin
+    maskLayer->scratchOff(CCRectMake(100, 100, 170, 170));
+
+    CCSprite* circle = CCSprite::create("mask-circle.png");
+    circle->setPosition(ccp(400, 300));
+    circle->setScale(1.2);
+    maskLayer->scratchOff(circle);
     
-    p->setPosition(ccp(500.242, 500.9876));
-    p->setScale(1);
-    layer->scratchOff(p);
-    
-    p->setPosition(ccp(500.76, 200.34));
-    p->setScale(0.7);
-    layer->scratchOff(p);
-    layer->end();
+    circle->setPosition(ccp(500.76, 200.34));
+    circle->setScale(0.7);
+    maskLayer->scratchOff(circle);
+    maskLayer->end(); // end
     return true;
 }
 
