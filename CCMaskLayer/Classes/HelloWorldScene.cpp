@@ -86,7 +86,8 @@ bool HelloWorld::init()
     p->setScale(0.8);
     layer->scratchOff(p);
     layer->end();
-    
+    layer->setOpacity(200);
+    layer->setColor(ccc3(0, 255, 255));
     return true;
 }
 

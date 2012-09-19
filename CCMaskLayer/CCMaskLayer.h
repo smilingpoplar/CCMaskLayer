@@ -17,9 +17,12 @@ class CCMaskLayer : public cocos2d::CCNode, public cocos2d::CCRGBAProtocol {
     CC_SYNTHESIZE_RETAIN(cocos2d::CCArray *, _spriteArray, SpriteArray);
 private:
     std::vector<cocos2d::CCRect> _holeArray;
+    cocos2d::ccColor4B _layerColor;
     GLubyte _opacity;
     cocos2d::ccColor3B _color;
     
+    cocos2d::ccColor3B getModifiedColor();
+    GLubyte getModifiedOpacity();
     void addColorLayer(const cocos2d::CCRect &rect);
     void clearColorLayerArray();
     cocos2d::CCSprite* copySprite(cocos2d::CCSprite *sprite);
@@ -39,7 +42,7 @@ public:
     virtual GLubyte getOpacity(void) { return _opacity; }
     virtual void setOpacity(GLubyte opacity);
     virtual const cocos2d::ccColor3B& getColor(void) { return _color; }
-    virtual void setColor(const cocos2d::ccColor3B& color) { _color = color; }
+    virtual void setColor(const cocos2d::ccColor3B& color);
     virtual void setOpacityModifyRGB(bool bValue) { CC_UNUSED_PARAM(bValue); }
     virtual bool isOpacityModifyRGB(void) { return false; }
 };

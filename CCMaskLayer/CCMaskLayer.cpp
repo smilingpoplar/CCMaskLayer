@@ -89,8 +89,9 @@ CCMaskLayer::~CCMaskLayer()
 
 bool CCMaskLayer::initWithColor(const ccColor4B &color)
 {
-    _color = ccc3(color.r, color.g, color.b);
-    _opacity = color.a;
+    _layerColor = color;
+    _color = ccWHITE;
+    _opacity = 255;
     setColorLayerArray(CCArray::create());
     setSpriteArray(CCArray::create());
     return true;
@@ -107,9 +108,21 @@ CCMaskLayer* CCMaskLayer::create(const cocos2d::ccColor4B &color)
     return NULL;
 }
 
+ccColor3B CCMaskLayer::getModifiedColor()
+{
+    return ccc3(_layerColor.r*(_color.r/255.0), _layerColor.g*(_color.g/255.0), _layerColor.b*(_color.b/255.0));
+}
+
+GLubyte CCMaskLayer::getModifiedOpacity()
+{
+    return _layerColor.a*(_opacity/255.0);
+}
+
 void CCMaskLayer::addColorLayer(const cocos2d::CCRect &rect)
 {
-    auto colorLayer = CCLayerColor::create(ccc4(_color.r, _color.g, _color.b, _opacity), rect.size.width, rect.size.height);
+    ccColor3B modifiedColor = getModifiedColor();
+    ccColor4B color = ccc4(modifiedColor.r, modifiedColor.g, modifiedColor.b, getModifiedOpacity());
+    auto colorLayer = CCLayerColor::create(color, rect.size.width, rect.size.height);
     colorLayer->setPosition(rect.origin);
     addChild(colorLayer);
     _colorLayerArray->addObject(colorLayer);
@@ -135,9 +148,9 @@ void CCMaskLayer::addSprite(cocos2d::CCSprite *sprite)
 {
     sprite = copySprite(sprite);
     addChild(sprite);
-    sprite->setColor(_color);
-    sprite->setOpacity(_opacity);
-
+    sprite->setColor(getModifiedColor());
+    sprite->setOpacity(getModifiedOpacity());
+    
     _spriteArray->addObject(sprite);
 }
 
@@ -147,7 +160,7 @@ void CCMaskLayer::clearSpriteArray()
     _spriteArray->removeAllObjects();
 }
 
-void CCMaskLayer::scratchOff(const std::vector<cocos2d::CCRect> &holes)
+void CCMaskLayer::scratchOff(const vector<cocos2d::CCRect> &holes)
 {
     CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
     CCRect screenRect = CCRectMake(0, 0, screenSize.width, screenSize.height);
@@ -174,7 +187,7 @@ void CCMaskLayer::scratchOff(cocos2d::CCSprite *sprite)
     CCRect rect = CCRectMake(0, 0, sprite->getContentSize().width, sprite->getContentSize().height);
     rect = CCRectApplyAffineTransform(rect, sprite->nodeToWorldTransform());
     _holeArray.push_back(rect);
-    
+
     addSprite(sprite);
 }
 
@@ -192,6 +205,17 @@ void CCMaskLayer::setOpacity(GLubyte opacity)
     CCObject *itemObject;
 	CCARRAY_FOREACH(m_pChildren, itemObject) {
         CCRGBAProtocol *item = dynamic_cast<CCRGBAProtocol *>(itemObject);
-        if (item) item->setOpacity(_opacity);
+        if (item) item->setOpacity(getModifiedOpacity());
+    }
+}
+
+void CCMaskLayer::setColor(const ccColor3B& color)
+{
+	_color = color;
+	
+    CCObject *itemObject;
+	CCARRAY_FOREACH(m_pChildren, itemObject) {
+        CCRGBAProtocol *item = dynamic_cast<CCRGBAProtocol *>(itemObject);
+        if (item) item->setColor(getModifiedColor());
     }
 }
