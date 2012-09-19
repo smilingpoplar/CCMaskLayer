@@ -73,11 +73,18 @@ bool HelloWorld::init()
     // add the sprite as a child to this layer
     this->addChild(pSprite, 0);
     
+    CCSprite* p = CCSprite::create("HelloWorld.png");
     CCMaskLayer *layer = CCMaskLayer::create(ccc4(255, 0, 0, 200));
     addChild(layer);
     layer->begin();
     layer->scratchOff(CCRectMake(20, 20, 200, 200));
     layer->scratchOff(CCRectMake(100, 100, 150, 150));
+    p->setPosition(ccp(300, 300));
+    p->setScale(0.5);
+    layer->scratchOff(p);
+    p->setPosition(ccp(300, 500));
+    p->setScale(0.8);
+    layer->scratchOff(p);
     layer->end();
     
     return true;

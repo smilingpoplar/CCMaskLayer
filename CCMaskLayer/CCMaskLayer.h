@@ -12,12 +12,19 @@
 #include "cocos2d.h"
 #include <vector>
 
-class CCMaskLayer : public cocos2d::CCNode {
-    CC_SYNTHESIZE_PASS_BY_REF(cocos2d::ccColor4B, _color, Color);
-    CC_SYNTHESIZE_RETAIN(cocos2d::CCArray *, _colorLayerArray, ColorLayerArray)
+class CCMaskLayer : public cocos2d::CCNode, public cocos2d::CCRGBAProtocol {
+    CC_SYNTHESIZE_RETAIN(cocos2d::CCArray *, _colorLayerArray, ColorLayerArray);
+    CC_SYNTHESIZE_RETAIN(cocos2d::CCArray *, _spriteArray, SpriteArray);
 private:
     std::vector<cocos2d::CCRect> _holeArray;
+    GLubyte _opacity;
+    cocos2d::ccColor3B _color;
+    
     void addColorLayer(const cocos2d::CCRect &rect);
+    void clearColorLayerArray();
+    cocos2d::CCSprite* copySprite(cocos2d::CCSprite *sprite);
+    void addSprite(cocos2d::CCSprite *sprite);
+    void clearSpriteArray();
     void scratchOff(const std::vector<cocos2d::CCRect> &holes);
     bool initWithColor(const cocos2d::ccColor4B &color);
     CCMaskLayer();
@@ -26,7 +33,15 @@ public:
     static CCMaskLayer* create(const cocos2d::ccColor4B &color);
     void begin();
     void scratchOff(const cocos2d::CCRect &hole);
+    void scratchOff(cocos2d::CCSprite *sprite);
     void end();
+    // CCRGBAProtocol
+    virtual GLubyte getOpacity(void) { return _opacity; }
+    virtual void setOpacity(GLubyte opacity);
+    virtual const cocos2d::ccColor3B& getColor(void) { return _color; }
+    virtual void setColor(const cocos2d::ccColor3B& color) { _color = color; }
+    virtual void setOpacityModifyRGB(bool bValue) { CC_UNUSED_PARAM(bValue); }
+    virtual bool isOpacityModifyRGB(void) { return false; }
 };
 
 #endif

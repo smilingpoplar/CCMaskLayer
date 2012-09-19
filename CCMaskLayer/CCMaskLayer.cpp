@@ -73,27 +73,26 @@ vector<CCRect> split(const CCRect &rect, const vector<CCRect> &holes)
     }
     merge(output);
     
-    CCLOG("layer count: %d", output.size());
-    for (auto &r : output) {
-        CCLOG("(%.2f, %.2f, %.2f, %.2f)", r.origin.x, r.origin.y, r.size.width, r.size.height);
-    }
     return output;
 }
 
 CCMaskLayer::CCMaskLayer()
-: _colorLayerArray(NULL)
+: _colorLayerArray(NULL), _spriteArray(NULL)
 {
 }
 
 CCMaskLayer::~CCMaskLayer()
 {
     CC_SAFE_RELEASE(_colorLayerArray);
+    CC_SAFE_RELEASE(_spriteArray);
 }
 
 bool CCMaskLayer::initWithColor(const ccColor4B &color)
 {
-    setColor(color);
+    _color = ccc3(color.r, color.g, color.b);
+    _opacity = color.a;
     setColorLayerArray(CCArray::create());
+    setSpriteArray(CCArray::create());
     return true;
 }
 
@@ -110,10 +109,42 @@ CCMaskLayer* CCMaskLayer::create(const cocos2d::ccColor4B &color)
 
 void CCMaskLayer::addColorLayer(const cocos2d::CCRect &rect)
 {
-    auto colorLayer = CCLayerColor::create(getColor(), rect.size.width, rect.size.height);
+    auto colorLayer = CCLayerColor::create(ccc4(_color.r, _color.g, _color.b, _opacity), rect.size.width, rect.size.height);
     colorLayer->setPosition(rect.origin);
     addChild(colorLayer);
     _colorLayerArray->addObject(colorLayer);
+}
+
+void CCMaskLayer::clearColorLayerArray()
+{
+    arrayMakeObjectsPerformSelectorWithObject(_colorLayerArray, removeFromParentAndCleanup, true, CCLayerColor *);
+    _colorLayerArray->removeAllObjects();
+}
+
+CCSprite* CCMaskLayer::copySprite(CCSprite *sprite)
+{
+    CCSprite *result = CCSprite::createWithTexture(sprite->getTexture());
+    CCRect rectInPixels = CC_RECT_POINTS_TO_PIXELS(sprite->getTextureRect());
+    result->setTextureRect(rectInPixels, sprite->isTextureRectRotated(), rectInPixels.size);
+    result->setPosition(sprite->getPosition());
+    result->setScale(sprite->getScale());
+    return result;
+}
+
+void CCMaskLayer::addSprite(cocos2d::CCSprite *sprite)
+{
+    sprite = copySprite(sprite);
+    addChild(sprite);
+    sprite->setColor(_color);
+    sprite->setOpacity(_opacity);
+
+    _spriteArray->addObject(sprite);
+}
+
+void CCMaskLayer::clearSpriteArray()
+{
+    arrayMakeObjectsPerformSelectorWithObject(_spriteArray, removeFromParentAndCleanup, true, CCSprite *);
+    _spriteArray->removeAllObjects();
 }
 
 void CCMaskLayer::scratchOff(const std::vector<cocos2d::CCRect> &holes)
@@ -128,8 +159,8 @@ void CCMaskLayer::scratchOff(const std::vector<cocos2d::CCRect> &holes)
 
 void CCMaskLayer::begin()
 {
-    arrayMakeObjectsPerformSelectorWithObject(_colorLayerArray, removeFromParentAndCleanup, true, CCLayerColor *);
-    _colorLayerArray->removeAllObjects();
+    clearColorLayerArray();
+    clearSpriteArray();
     _holeArray.clear();
 }
 
@@ -138,7 +169,29 @@ void CCMaskLayer::scratchOff(const cocos2d::CCRect &hole)
     _holeArray.push_back(hole);
 }
 
+void CCMaskLayer::scratchOff(cocos2d::CCSprite *sprite)
+{
+    CCRect rect = CCRectMake(0, 0, sprite->getContentSize().width, sprite->getContentSize().height);
+    rect = CCRectApplyAffineTransform(rect, sprite->nodeToWorldTransform());
+    _holeArray.push_back(rect);
+    
+    addSprite(sprite);
+}
+
 void CCMaskLayer::end()
 {
     scratchOff(_holeArray);
+}
+
+#pragma mark - CCRGBAProtocol
+
+void CCMaskLayer::setOpacity(GLubyte opacity)
+{
+	_opacity = opacity;
+	
+    CCObject *itemObject;
+	CCARRAY_FOREACH(m_pChildren, itemObject) {
+        CCRGBAProtocol *item = dynamic_cast<CCRGBAProtocol *>(itemObject);
+        if (item) item->setOpacity(_opacity);
+    }
 }
